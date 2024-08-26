@@ -1,0 +1,62 @@
+name: "Automatically tag new version"
+
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
+      translation-token:
+        required: true
+
+jobs:
+  ci:
+    name: "Translations"
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@v3
+      with:
+        ref: main
+        fetch-depth: 0 #To Fetch All Tags and Branches
+
+    - name: Install Dependencies
+      uses: php-actions/composer@v6
+      with:
+        dev: no
+
+    ##########################################
+    # Push / Pull translation files          #
+    ##########################################
+    # Push Transifex
+    - name: Push source file using transifex client
+      uses: transifex/cli-action@v2
+      with:
+        args: push
+        token: ${{ secrets.translation-token }}
+
+    # Clean Transifex CLI
+    - name: Clean Transifex CLI
+      run: rm -fr /tmp/tx
+
+    # Pull from Transifex
+    - name: Pull source file using transifex client
+      uses: transifex/cli-action@v2
+      with:
+        args: pull
+        token: ${{ secrets.translation-token }}
+
+    ##########################################
+    # Commit changes                         #
+    ##########################################
+    - uses: stefanzweifel/git-auto-commit-action@v5
+      id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
+      with:
+        commit_message: Update locales
+
+    - name: "Run if changes have been detected"
+      if: steps.auto-commit-action.outputs.changes_detected == 'true'
+      run: echo "Translations have been updated"
+
+    - name: "Run if no changes have been detected"
+      if: steps.auto-commit-action.outputs.changes_detected == 'false'
+      run: echo "No changes for translations"
