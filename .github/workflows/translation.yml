@@ -48,15 +48,15 @@ jobs:
     ##########################################
     # Commit changes                         #
     ##########################################
-    - uses: stefanzweifel/git-auto-commit-action@v5
-      id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
-      with:
-        commit_message: Update locales
+    #- uses: stefanzweifel/git-auto-commit-action@v5
+    #  id: auto-commit-action #mandatory for the output to show up in ${{ steps }}
+    #  with:
+    #    commit_message: Update locales
 
-    - name: "Run if changes have been detected"
-      if: steps.auto-commit-action.outputs.changes_detected == 'true'
-      run: echo "Translations have been updated"
+    #- name: "Run if changes have been detected"
+    #  if: steps.auto-commit-action.outputs.changes_detected == 'true'
+    #  run: echo "Translations have been updated"
 
-    - name: "Run if no changes have been detected"
-      if: steps.auto-commit-action.outputs.changes_detected == 'false'
-      run: echo "No changes for translations"
+    #- name: "Run if no changes have been detected"
+    #  if: steps.auto-commit-action.outputs.changes_detected == 'false'
+    #  run: echo "No changes for translations"
