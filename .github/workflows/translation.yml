@@ -1,4 +1,4 @@
-name: "Automatically tag new version"
+name: "Refresh translations"
 
 on:
   workflow_call:
