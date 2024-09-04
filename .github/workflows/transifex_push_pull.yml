@@ -27,13 +27,6 @@ jobs:
       with:
         ref: ${{ inputs.branch }}
 
-    ##########################################
-    # Install depdendencies                  #
-    ##########################################
-    - name: Install Dependencies
-      uses: php-actions/composer@v6
-      with:
-        dev: yes
 
     ##########################################
     # Generate <plugin>.pot file             #
