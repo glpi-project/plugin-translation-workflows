@@ -31,10 +31,8 @@ jobs:
     # Install depdendencies                  #
     ##########################################
     - name: Install Dependencies
-      uses: php-actions/composer@v6
-      with:
-        command: composer install --ansi --no-interaction --no-progress --prefer-dist
-        dev: yes
+      run: |
+        composer install --no-progress --no-suggest --no-interaction --prefer-dist
 
     ##########################################
     # Generate <plugin>.pot file             #
