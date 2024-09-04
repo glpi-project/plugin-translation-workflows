@@ -31,15 +31,15 @@ jobs:
     # Install depdendencies                  #
     ##########################################
     - name: Install Dependencies
-      run: |
-        composer install --no-progress --no-suggest --no-interaction --prefer-dist
+      uses: php-actions/composer@v6
+      with:
+        dev: yes
 
     ##########################################
     # Generate <plugin>.pot file             #
     ##########################################
     - name: "Generate <plugin>.pot file"
-      run: |
-        ./vendor/glpi-project/tools/bin/extract-locales
+      run: ./vendor/bin/extract-locales
 
 
     ##########################################

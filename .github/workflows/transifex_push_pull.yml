@@ -15,8 +15,6 @@ jobs:
   ci:
     name: "Translations"
     runs-on: ubuntu-latest
-    container:
-      image: "ghcr.io/glpi-project/plugin-builder"
     steps:
 
     ##########################################
@@ -30,16 +28,28 @@ jobs:
     ##########################################
     # Install depdendencies                  #
     ##########################################
-    - name: Install Dependencies
+    - name: Install xgettext
       run: |
-        composer install --no-progress --no-suggest --no-interaction --prefer-dist
+        sudo apt-get install gettext libgettextpo-dev python3-dev py3-pip libffi-dev libxml2-dev libxslt-dev
+        pip install lxml git
+        pip install gitpython
+        pip install PyGithub
+        pip install termcolor
+
+    ##########################################
+    # Run composer                           #
+    ##########################################
+    - name: Install Dependencies
+      uses: php-actions/composer@v6
+      with:
+        dev: yes
+
 
     ##########################################
     # Generate <plugin>.pot file             #
     ##########################################
     - name: "Generate <plugin>.pot file"
-      run: |
-        ./vendor/glpi-project/tools/bin/extract-locales
+      run: ./vendor/bin/extract-locales
 
 
     ##########################################
