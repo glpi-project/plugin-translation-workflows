@@ -74,11 +74,21 @@ jobs:
     - name: "Generate target branch name"
       run: echo BRANCH_NAME=transifex/i18n-updates--$(date +%s) >> $GITHUB_ENV
 
+    - name: "Check status"
+      id: "check-status"
+      run: |
+        if [[ `git status --porcelain locales/*.mo` ]]; then
+          echo "CREATE_PR=yes" >> $GITHUB_OUTPUT
+        else
+          echo "CREATE_PR=no" >> $GITHUB_OUTPUT
+        fi
+
 
     ##########################################
     # Create Pull Request                    #
     ##########################################
     - name: Create Pull Request
+      if: ${{ steps.check-status.outputs.CREATE_PR == 'yes' }}
       id: cpr
       uses: peter-evans/create-pull-request@v7
       with:
