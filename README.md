@@ -4,14 +4,9 @@
 
 ### Push
 
-This workflow will update and push the translation file (`<plugin.pot>`) using the Transifex CLI.
-
-* Install the necessary dependencies for extracting translations.
-* Generate a `<plugin>.pot` file.
-* Pushes the `<plugin>.pot` file update to Transifex.
+This workflow will push the up-to-date locales sources to Transifex.
 
 You can use this workflow using the following Github Actions configuration.
-
 
 ```yaml
 name: "Transifex Push"
@@ -34,17 +29,10 @@ jobs:
 
 ### Push / pull
 
-This workflow will update translations using Transifex CLI.
-
-* Install the necessary dependencies for extracting translations.
-* Generate a `<plugin>.pot` file for translations.
-* `Push` updates to Transifex and `pull` translation files from Transifex.
-* Compile translation files to binary version (`.mo`)
-* Create `Pull Request` if necessary.
+This workflow will fetch the latest translations from Transifex and propose a pull request with the incoming changes.
 
 You can use this workflow using the following Github Actions configuration.
 This workflow will require the `contents: "write"` permission to be able to create an update commit and the `pull-requests: "write"` permission to create the pull request.
-
 
 ```yaml
 name: "Transifex Push / Pull"
