@@ -3,7 +3,7 @@
 This workflow will update translations using Transifex CLI.
 
 You can use this workflow using the following Github Actions configuration.
-This workflow will require the `contents: "write"` permission to be able to create an update commit
+This workflow will require the `contents: "write"` permission to be able to create an update commit.
 
 * Install the necessary dependencies for extracting translations.
 * Generate a `.pot` file for translations.
