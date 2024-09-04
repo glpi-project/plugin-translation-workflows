@@ -35,9 +35,6 @@ jobs:
       with:
         dev: yes
 
-    - name: Install xgettext
-      run: sudo apt-get install gettext libgettextpo-dev
-
     ##########################################
     # Generate <plugin>.pot file             #
     ##########################################
