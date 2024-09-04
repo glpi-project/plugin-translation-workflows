@@ -5,7 +5,7 @@ on:
     secrets:
       tx_token:
         required: true
-      based_branch:
+      branch:
         required: true
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
     - name: "Checkout"
       uses: actions/checkout@v4
       with:
-        ref: ${{ secrets.based_branch }}
+        ref: ${{ secrets.branch }}
         fetch-depth: 0 #To Fetch All Tags and Branches
 
     ##########################################

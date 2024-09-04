@@ -5,8 +5,11 @@ on:
     secrets:
       tx_token:
         required: true
-      based_branch:
-        required: true
+    inputs:
+      branch:
+        required: false
+        default: 'main'
+        type: 'string'
 
 jobs:
   ci:
@@ -20,7 +23,7 @@ jobs:
     - name: "Checkout"
       uses: actions/checkout@v4
       with:
-        ref: ${{ secrets.based_branch }}
+        ref: ${{ secrets.branch }}
         fetch-depth: 0 #To Fetch All Tags and Branches
 
     ##########################################
@@ -84,7 +87,7 @@ jobs:
         author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
         signoff: false
         branch: ${{ env.BRANCH_NAME }}
-        base: ${{ secrets.based_branch }}
+        base: ${{ secrets.branch }}
         add-paths: locales/
         labels: i18n
         delete-branch: true
