@@ -1,4 +1,4 @@
-name: "Refresh translations"
+name: "Transifex Push"
 
 on:
   workflow_call:
@@ -42,40 +42,10 @@ jobs:
 
 
     ##########################################
-    # Push and Pull transifiex source        #
+    # Push transifiex source puglin.pot #
     ##########################################
     - name: Push source file (.pot)
       uses: transifex/cli-action@v2
       with:
         args: push
         token: ${{ secrets.tx_token }}
-
-    - name: Clean Transifex CLI
-      run: rm -fr /tmp/tx
-
-    - name: Pull source file (.po / .mo)
-      uses: transifex/cli-action@v2
-      with:
-        args: pull --force --all --minimum-perc=80
-        token: ${{ secrets.tx_token }}
-
-
-    ##########################################
-    # Create Pull Request                    #
-    ##########################################
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v7
-      with:
-        commit-message: Update locales
-        committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-        author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
-        signoff: false
-        branch: transifex/i18n-updates
-        base: ${{ secrets.based_branch }}
-        add-paths: locales/
-        labels: i18n
-        delete-branch: true
-        title: 'Chore(i18n): update translations'
-        body: Auto-generated `PR` to update translations
-        draft: false
