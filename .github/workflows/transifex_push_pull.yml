@@ -24,7 +24,6 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: ${{ secrets.branch }}
-        fetch-depth: 0 #To Fetch All Tags and Branches
 
     ##########################################
     # Install depdendencies                  #
