@@ -77,7 +77,7 @@ jobs:
     # Generate random branch name            #
     ##########################################
     - name: "Generate target branch name"
-      run: echo BRANCH_NAME=transifex/i18n-updates--$(date +%s) >> $GITHUB_ENV
+      run: echo BRANCH_NAME=transifex/i18n-updates-$(date +%s) >> $GITHUB_ENV
 
     - name: "Check status"
       id: "check-status"
