@@ -7,8 +7,8 @@
 This workflow will update and push the translation file (`<plugin.pot>`) using the Transifex CLI.
 
 * Install the necessary dependencies for extracting translations.
-* Generate a `<plugin>.pot` file for translations.
-* Pushes the `<plugin>.pot` file update to Transifex
+* Generate a `<plugin>.pot` file.
+* Pushes the `<plugin>.pot` file update to Transifex.
 
 You can use this workflow using the following Github Actions configuration.
 
@@ -37,9 +37,9 @@ jobs:
 This workflow will update translations using Transifex CLI.
 
 * Install the necessary dependencies for extracting translations.
-* Generate a `.pot` file for translations.
+* Generate a `<plugin>.pot` file for translations.
 * `Push` updates to Transifex and `pull` translation files from Transifex.
-* Compile translation files to binary version `.mo`
+* Compile translation files to binary version (`.mo`)
 * Create `Pull Request` if necessary.
 
 You can use this workflow using the following Github Actions configuration.
