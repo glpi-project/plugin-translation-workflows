@@ -5,8 +5,11 @@ on:
     secrets:
       tx_token:
         required: true
+    inputs:
       branch:
-        required: true
+        required: false
+        default: 'main'
+        type: 'string'
 
 jobs:
   ci:
