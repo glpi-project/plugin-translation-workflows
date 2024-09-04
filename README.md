@@ -1,4 +1,4 @@
-# Plugin translate workflows
+# Plugin translation workflows
 
 This workflow will update translations using Transifex CLI.
 
