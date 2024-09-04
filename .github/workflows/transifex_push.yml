@@ -38,7 +38,9 @@ jobs:
     # Generate <plugin>.pot file             #
     ##########################################
     - name: "Generate <plugin>.pot file"
-      run: ./vendor/bin/extract-locales
+      run: |
+        ls-laF vendor/glpi-project/tools/bin/extract-locales
+        ./vendor/glpi-project/tools/bin/extract-locales
 
 
     ##########################################
