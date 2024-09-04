@@ -23,7 +23,7 @@ jobs:
     - name: "Checkout"
       uses: actions/checkout@v4
       with:
-        ref: ${{ secrets.branch }}
+        ref: ${{ inputs.branch }}
 
     ##########################################
     # Install depdendencies                  #
