@@ -22,7 +22,8 @@ jobs:
     uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push.yml@v1"
     secrets:
       tx_token: "${{ secrets.TRANSLATE_TOKEN }}"
-      based_branch: "main"
+    with:
+      branch: "main"
 
 ```
 
