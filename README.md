@@ -43,7 +43,7 @@ This workflow will update translations using Transifex CLI.
 * Create `Pull Request` if necessary.
 
 You can use this workflow using the following Github Actions configuration.
-This workflow will require the `contents: "write"` permission to be able to create an update commit.
+This workflow will require the `contents: "write"` permission to be able to create an update commit and the `pull-requests: "write"` permission to create the pull request.
 
 
 ```yaml
