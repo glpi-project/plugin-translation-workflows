@@ -41,6 +41,7 @@ name: "Transifex Push / Pull"
 on:
   schedule:
     - cron: "0 0 * * *"
+  workflow_dispatch:
 
 jobs:
   transifex_push_pull:
