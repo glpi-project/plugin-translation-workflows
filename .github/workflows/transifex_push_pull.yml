@@ -68,7 +68,7 @@ jobs:
     ##########################################
     # Generate random branch name            #
     ##########################################
-    - name: generate FOO unique variable based on timestamp
+    - name: "Generate target branch name"
       run: echo BRANCH_NAME=transifex/i18n-updates--$(date +%s) >> $GITHUB_ENV
 
 
