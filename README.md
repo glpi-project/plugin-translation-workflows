@@ -21,7 +21,7 @@ jobs:
     name: "Transifex Push"
     uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push.yml@v1"
     secrets:
-      tx_token: "${{ secrets.TRANSIFEX_TOKEN }}"
+      transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
     with:
       branch: "main"
 
@@ -51,7 +51,7 @@ jobs:
     name: "Transifex Push / Pull"
     uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push_pull.yml@v1"
     secrets:
-      tx_token: "${{ secrets.TRANSIFEX_TOKEN }}"
+      transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
     with:
       branch: "main"
 

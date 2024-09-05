@@ -3,7 +3,9 @@ name: "Transifex Push / Pull"
 on:
   workflow_call:
     secrets:
-      tx_token:
+      transifex-token:
+        required: true
+      github-token:
         required: true
     inputs:
       branch:
@@ -56,7 +58,7 @@ jobs:
       uses: transifex/cli-action@v2
       with:
         args: push
-        token: ${{ secrets.tx_token }}
+        token: ${{ secrets.transifex-token }}
 
     - name: Clean Transifex CLI
       run: rm -fr /tmp/tx
@@ -65,7 +67,7 @@ jobs:
       uses: transifex/cli-action@v2
       with:
         args: pull --force --all --minimum-perc=80
-        token: ${{ secrets.tx_token }}
+        token: ${{ secrets.transifex-token }}
 
     ##########################################
     # Generate .mo files                     #
@@ -108,3 +110,11 @@ jobs:
         title: 'Chore(i18n): update translations'
         body: Auto-generated `PR` to update translations
         draft: false
+        # A PAT is required.
+        # From https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow:
+        # > When you use the repository's GITHUB_TOKEN to perform tasks, events triggered by the GITHUB_TOKEN,
+        # > with the exception of workflow_dispatch and repository_dispatch, will not create a new workflow run.
+        # > This prevents you from accidentally creating recursive workflow runs. For example, if a workflow run pushes
+        # > code using the repository's GITHUB_TOKEN, a new workflow will not run even when the repository
+        # > contains a workflow configured to run when push events occur.
+        token: ${{ secrets.github-token }}
