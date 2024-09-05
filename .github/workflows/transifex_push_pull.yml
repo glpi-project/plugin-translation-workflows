@@ -12,7 +12,7 @@ on:
         type: 'string'
 
 jobs:
-  ci:
+  transifex-push-pull:
     name: "Translations"
     runs-on: ubuntu-latest
     steps:
