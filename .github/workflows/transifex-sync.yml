@@ -69,6 +69,7 @@ jobs:
         commit-message: "Update locales"
         branch: "i18n-updates"
         branch-suffix: "timestamp"
+        add-paths: "locales/"
         labels: "i18n"
         delete-branch: true
         title: "Chore(i18n): update translations"
