@@ -102,7 +102,6 @@ jobs:
         author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
         signoff: false
         branch: ${{ env.BRANCH_NAME }}
-        base: ${{ inputs.branch }}
         add-paths: locales/
         labels: i18n
         delete-branch: true
