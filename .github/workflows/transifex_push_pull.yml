@@ -69,22 +69,6 @@ jobs:
       run: ./vendor/bin/plugin-release --compile-mo
 
     ##########################################
-    # Generate random branch name            #
-    ##########################################
-    - name: "Generate target branch name"
-      run: echo BRANCH_NAME=transifex/i18n-updates-$(date +%s) >> $GITHUB_ENV
-
-    - name: "Check status"
-      id: "check-status"
-      run: |
-        if [[ `git status --porcelain locales/*.mo` ]]; then
-          echo "CREATE_PR=yes" >> $GITHUB_OUTPUT
-        else
-          echo "CREATE_PR=no" >> $GITHUB_OUTPUT
-        fi
-
-
-    ##########################################
     # Create Pull Request                    #
     ##########################################
     - name: Create Pull Request
@@ -96,7 +80,8 @@ jobs:
         committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
         author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
         signoff: false
-        branch: ${{ env.BRANCH_NAME }}
+        branch: i18n-updates-
+        branch-suffix: random
         add-paths: locales/
         labels: i18n
         delete-branch: true
