@@ -7,15 +7,10 @@ on:
         required: true
       github-token:
         required: true
-    inputs:
-      branch:
-        required: false
-        default: 'main'
-        type: 'string'
 
 jobs:
   transifex-push-pull:
-    name: "Translations"
+    name: "Sync locales with Transifex"
     runs-on: ubuntu-latest
     steps:
 
@@ -24,8 +19,6 @@ jobs:
     ##########################################
     - name: "Checkout"
       uses: actions/checkout@v4
-      with:
-        ref: ${{ inputs.branch }}
 
     ##########################################
     # Install dependencies                  #

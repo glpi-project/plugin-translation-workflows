@@ -21,9 +21,8 @@ jobs:
     name: "Transifex Push"
     uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push.yml@v1"
     secrets:
+      # The Transifex API token used to push sources.
       transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
-    with:
-      branch: "main"
 
 ```
 
@@ -51,8 +50,12 @@ jobs:
     name: "Transifex Push / Pull"
     uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push_pull.yml@v1"
     secrets:
+      # The GitHub access token used when the locales update pull request is created.
+      # This personal access token (PAT) is required to ensure that subsequent workflows that listen
+      # to the pull_request and the push events will be triggered.
+      # This PAT requires the `Content: read/write` and the `Pull requests: read/write` permissions.
+      github-token: "${{ secrets.LOCALES_SYNC_TOKEN }}"
+      # The Transifex API token used to push sources and pull translations.
       transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
-    with:
-      branch: "main"
 
 ```

@@ -5,15 +5,10 @@ on:
     secrets:
       transifex-token:
         required: true
-    inputs:
-      branch:
-        required: false
-        default: 'main'
-        type: 'string'
 
 jobs:
   transifex-push:
-    name: "Translations"
+    name: "Push sources on Transifex"
     runs-on: ubuntu-latest
     steps:
 
