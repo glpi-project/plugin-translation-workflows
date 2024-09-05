@@ -15,8 +15,6 @@ jobs:
   ci:
     name: "Translations"
     runs-on: ubuntu-latest
-    container:
-      image: "ghcr.io/glpi-project/plugin-builder"
     steps:
 
     ##########################################
