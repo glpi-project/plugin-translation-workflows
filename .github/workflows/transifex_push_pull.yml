@@ -71,6 +71,14 @@ jobs:
     ##########################################
     # Create Pull Request                    #
     ##########################################
+    - name: "Check status"
+      id: "check-status"
+      run: |
+        if [[ `git status --porcelain locales/*.mo` ]]; then
+          echo "CREATE_PR=yes" >> $GITHUB_OUTPUT
+        else
+          echo "CREATE_PR=no" >> $GITHUB_OUTPUT
+        fi
     - name: Create Pull Request
       if: ${{ steps.check-status.outputs.CREATE_PR == 'yes' }}
       id: cpr
