@@ -9,7 +9,7 @@ This workflow will push the up-to-date locales sources to Transifex.
 You can use this workflow using the following Github Actions configuration.
 
 ```yaml
-name: "Transifex Push"
+name: "Update locales sources"
 
 on:
   push:
@@ -17,13 +17,12 @@ on:
       - "main"
 
 jobs:
-  transifex_push:
-    name: "Transifex Push"
-    uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push.yml@v1"
+  push-sources-on-transifex:
+    name: "Push locales sources"
+    uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex-push-sources.yml@v1"
     secrets:
       # The Transifex API token used to push sources.
       transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
-
 ```
 
 
@@ -32,10 +31,9 @@ jobs:
 This workflow will fetch the latest translations from Transifex and propose a pull request with the incoming changes.
 
 You can use this workflow using the following Github Actions configuration.
-This workflow will require the `contents: "write"` permission to be able to create an update commit and the `pull-requests: "write"` permission to create the pull request.
 
 ```yaml
-name: "Transifex Push / Pull"
+name: "Synchronize locales"
 
 on:
   schedule:
@@ -43,12 +41,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  transifex_push_pull:
-    permissions:
-      contents: "write"
-      pull-requests: "write"
-    name: "Transifex Push / Pull"
-    uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex_push_pull.yml@v1"
+  sync-with-transifex:
+    name: "Sync with transifex"
+    uses: "glpi-project/plugin-translation-workflows/.github/workflows/transifex-sync.yml@v1"
     secrets:
       # The GitHub access token used when the locales update pull request is created.
       # This personal access token (PAT) is required to ensure that subsequent workflows that listen
@@ -57,5 +52,4 @@ jobs:
       github-token: "${{ secrets.LOCALES_SYNC_TOKEN }}"
       # The Transifex API token used to push sources and pull translations.
       transifex-token: "${{ secrets.TRANSIFEX_TOKEN }}"
-
 ```
