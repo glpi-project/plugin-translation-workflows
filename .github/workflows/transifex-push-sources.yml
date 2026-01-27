@@ -48,7 +48,7 @@ jobs:
         php bin/console tools:locales:extract --plugin=$PLUGIN_KEY
 
     - name: "Push source file"
-        uses: "transifex/cli-action@v2"
+      uses: "transifex/cli-action@v2"
       with:
         args: "push"
         token: "${{ secrets.transifex-token }}"
