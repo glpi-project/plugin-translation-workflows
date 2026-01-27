@@ -10,28 +10,45 @@ jobs:
   transifex-push:
     name: "Push sources on Transifex"
     runs-on: "ubuntu-latest"
+    container:
+      image: "ghcr.io/froozeify/githubactions-glpi-apache:latest" #TODO: Change this for glpi-project
+      options: --user 1001 # using built-in image user, otherwise GitHub Actions can't write file to the container
     steps:
 
-    - name: "Checkout"
+    - name: "Checkout setup.php"
+      uses: "actions/checkout@v4"
+      with:
+        sparse-checkout: setup.php
+        path: tmp_setup
+
+    - name: "Get Plugin Key"
+      run: |
+        PLUGIN_KEY=$(sed --quiet 's/.*function plugin_version_\([a-z0-9_]\+\).*/\1/p' tmp_setup/setup.php | head --lines=1)
+        if [ -z "$PLUGIN_KEY" ]; then
+          echo "Could not extract plugin key from setup.php"
+          exit 1
+        fi
+        echo "PLUGIN_KEY=$PLUGIN_KEY" >> $GITHUB_ENV
+
+    - name: "Checkout Plugin"
       uses: "actions/checkout@v4"
 
-    - name: "Install system dependencies"
+    - name: "Link Plugin to GLPI"
       run: |
-        sudo apt-get update --quiet
-        sudo apt-get install gettext libgettextpo-dev python3-dev python3-pip libffi-dev libxml2-dev libxslt-dev git
-        pip install lxml gitpython PyGithub termcolor
-
-    - name: "Install composer dependencies"
-      uses: "php-actions/composer@v6"
-      with:
-        dev: yes
+        sudo ln -s $GITHUB_WORKSPACE /var/www/glpi/plugins/$PLUGIN_KEY
+        # Fix permissions for logs and other writable dirs
+        sudo mkdir -p /var/www/glpi/tests/files/_log
+        sudo chmod -R 777 /var/www/glpi/
+        # Ensure git trusts the directory
+        git config --global --add safe.directory '*'
 
     - name: "Extract locales"
+      working-directory: /var/www/glpi/
       run: |
-        ./vendor/bin/extract-locales
+        php bin/console tools:locales:extract --plugin=$PLUGIN_KEY
 
     - name: "Push source file"
-      uses: "transifex/cli-action@v2"
+        uses: "transifex/cli-action@v2"
       with:
         args: "push"
         token: "${{ secrets.transifex-token }}"
