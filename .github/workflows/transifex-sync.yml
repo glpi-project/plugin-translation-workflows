@@ -13,7 +13,7 @@ jobs:
     name: "Sync locales with Transifex"
     runs-on: "ubuntu-latest"
     container:
-      image: "ghcr.io/froozeify/githubactions-glpi-apache:latest" #TODO: Change this for glpi-project
+      image: "ghcr.io/glpi-project/githubactions-glpi-apache:latest"
       options: --user 1001 # using built-in image user, otherwise GitHub Actions can't write file to the container
     steps:
 
