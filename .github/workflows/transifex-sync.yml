@@ -89,7 +89,7 @@ jobs:
 
     - name: "Create pull request"
       if: ${{ steps.check-status.outputs.CREATE_PR == 'yes' }}
-      uses: "peter-evans/create-pull-request@v7"
+      uses: "peter-evans/create-pull-request@v8"
       with:
         commit-message: "Update locales"
         branch: "i18n-updates"
