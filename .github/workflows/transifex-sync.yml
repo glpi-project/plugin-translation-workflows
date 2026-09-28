@@ -37,16 +37,29 @@ jobs:
       with:
         path: "plugins/${{ env.PLUGIN_KEY }}"
 
-    - name: "Link Plugin to GLPI"
+    - name: "Install plugin's composer dependencies"
+      working-directory: "plugins/${{ env.PLUGIN_KEY }}"
       run: |
-        sudo ln -s "$GITHUB_WORKSPACE/plugins/$PLUGIN_KEY" "/var/www/glpi/plugins/$PLUGIN_KEY"
-        sudo chmod -R a+rwX /var/www/glpi/
-        git config --global --add safe.directory '*'
+        if [ -f composer.json ]; then
+          composer install --no-interaction --prefer-dist
+        fi
 
     - name: "Extract locales"
-      working-directory: "/var/www/glpi/"
+      # Plugins still requiring glpi-project/tools keep using their own vendor/bin/extract-locales.
+      # Others fall back to GLPI core's console command, which needs no plugin-side tooling dependency
+      # but requires the plugin to be linked into the GLPI installation first.
       run: |
-        php bin/console tools:locales:extract --plugin=${{ env.PLUGIN_KEY }} --no-interaction
+        if [ -x "plugins/${{ env.PLUGIN_KEY }}/vendor/bin/extract-locales" ]; then
+          sudo apt-get update --quiet
+          sudo apt-get install --yes gettext libgettextpo-dev python3-dev python3-pip libffi-dev libxml2-dev libxslt-dev git
+          pip install lxml gitpython PyGithub termcolor
+          cd "plugins/${{ env.PLUGIN_KEY }}" && ./vendor/bin/extract-locales
+        else
+          sudo ln -s "$GITHUB_WORKSPACE/plugins/$PLUGIN_KEY" "/var/www/glpi/plugins/$PLUGIN_KEY"
+          sudo chmod -R a+rwX /var/www/glpi/
+          git config --global --add safe.directory '*'
+          cd /var/www/glpi && php bin/console tools:locales:extract --plugin=${{ env.PLUGIN_KEY }} --no-interaction
+        fi
 
     - name: "Push source file"
       working-directory: "plugins/${{ env.PLUGIN_KEY }}"
@@ -67,9 +80,13 @@ jobs:
         token: "${{ secrets.transifex-token }}"
 
     - name: "Compile MO files"
-      working-directory: "/var/www/glpi/"
+      # Same fallback logic as the extract step: plugin's own vendor/bin/plugin-release if present, GLPI core console otherwise.
       run: |
-        php bin/console tools:locales:compile --plugin=${{ env.PLUGIN_KEY }} --no-interaction
+        if [ -x "plugins/${{ env.PLUGIN_KEY }}/vendor/bin/plugin-release" ]; then
+          cd "plugins/${{ env.PLUGIN_KEY }}" && ./vendor/bin/plugin-release --compile-mo
+        else
+          cd /var/www/glpi && php bin/console tools:locales:compile --plugin=${{ env.PLUGIN_KEY }} --no-interaction
+        fi
 
     - name: "Check status"
       id: "check-status"
