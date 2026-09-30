@@ -15,38 +15,14 @@ jobs:
       options: --user 1001 # using built-in image user, otherwise GitHub Actions can't write file to the container
     steps:
 
-    - name: "Checkout setup.php"
-      uses: "actions/checkout@v7"
-      with:
-        sparse-checkout: setup.php
-        path: tmp_setup
-
-    - name: "Get Plugin Key"
-      run: |
-        PLUGIN_KEY=$(sed --quiet 's/.*function plugin_version_\([a-z0-9_]\+\).*/\1/p' tmp_setup/setup.php | head --lines=1)
-        if [ -z "$PLUGIN_KEY" ]; then
-          echo "Could not extract plugin key from setup.php"
-          exit 1
-        fi
-        echo "PLUGIN_KEY=$PLUGIN_KEY" >> $GITHUB_ENV
-
-    - name: "Checkout Plugin"
-      uses: "actions/checkout@v7"
-
-    - name: "Link Plugin to GLPI"
-      run: |
-        sudo ln -s $GITHUB_WORKSPACE /var/www/glpi/plugins/$PLUGIN_KEY
-        # Fix permissions for logs and other writable dirs
-        # Open the whole tree for writing so any tool (present or future) can write wherever it needs to.
-        sudo mkdir -p /var/www/glpi/tests/files/_log
-        sudo chmod -R a+rwX /var/www/glpi/
-        # Ensure git trusts the directory
-        git config --global --add safe.directory '*'
+    - name: "Setup GLPI plugin"
+      id: "setup-glpi-plugin"
+      uses: "glpi-project/plugin-translation-workflows/.github/actions/setup-glpi-plugin@v1"
 
     - name: "Extract locales"
       working-directory: /var/www/glpi/
       run: |
-        php bin/console tools:locales:extract --plugin=$PLUGIN_KEY
+        php bin/console tools:locales:extract --plugin=${{ steps.setup-glpi-plugin.outputs.plugin-key }}
 
     - name: "Push source file"
       uses: "transifex/cli-action@v2"
