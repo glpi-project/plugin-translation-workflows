@@ -19,7 +19,7 @@ jobs:
 
     - name: "Setup GLPI plugin"
       id: "setup-glpi-plugin"
-      uses: "glpi-project/plugin-translation-workflows/.github/actions/setup-glpi-plugin@v1"
+      uses: "$/.github/actions/setup-glpi-plugin"
 
     - name: "Extract locales"
       working-directory: /var/www/glpi/
@@ -27,7 +27,7 @@ jobs:
         php bin/console tools:locales:extract --plugin=${{ steps.setup-glpi-plugin.outputs.plugin-key }}
 
     - name: "Push source file"
-      uses: "transifex/cli-action@v2"
+      uses: "transifex/cli-action@584fd205cbe598773b5a81ce711fa44842678189" # v2
       with:
         args: "push"
         token: "${{ secrets.transifex-token }}"
@@ -37,7 +37,7 @@ jobs:
         rm -fr /tmp/tx
 
     - name: "Pull translations"
-      uses: "transifex/cli-action@v2"
+      uses: "transifex/cli-action@584fd205cbe598773b5a81ce711fa44842678189" # v2
       with:
         args: "pull --force --all --minimum-perc=80"
         token: "${{ secrets.transifex-token }}"
@@ -60,7 +60,7 @@ jobs:
 
     - name: "Create pull request"
       if: ${{ steps.check-status.outputs.CREATE_PR == 'yes' }}
-      uses: "peter-evans/create-pull-request@v8"
+      uses: "peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1" # v8.1.1
       with:
         commit-message: "Update locales"
         branch: "i18n-updates"

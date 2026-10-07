@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: "Checkout setup.php"
-      uses: "actions/checkout@v7"
+      uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
       with:
         sparse-checkout: setup.php
         path: tmp_setup
@@ -28,7 +28,7 @@ runs:
         echo "plugin-key=$PLUGIN_KEY" >> $GITHUB_OUTPUT
 
     - name: "Checkout Plugin"
-      uses: "actions/checkout@v7"
+      uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7.0.1
 
     - name: "Link Plugin to GLPI"
       shell: "bash"

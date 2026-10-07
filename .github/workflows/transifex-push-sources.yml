@@ -17,7 +17,7 @@ jobs:
 
     - name: "Setup GLPI plugin"
       id: "setup-glpi-plugin"
-      uses: "glpi-project/plugin-translation-workflows/.github/actions/setup-glpi-plugin@v1"
+      uses: "$/.github/actions/setup-glpi-plugin"
 
     - name: "Extract locales"
       working-directory: /var/www/glpi/
@@ -25,7 +25,7 @@ jobs:
         php bin/console tools:locales:extract --plugin=${{ steps.setup-glpi-plugin.outputs.plugin-key }}
 
     - name: "Push source file"
-      uses: "transifex/cli-action@v2"
+      uses: "transifex/cli-action@584fd205cbe598773b5a81ce711fa44842678189" # v2
       with:
         args: "push"
         token: "${{ secrets.transifex-token }}"
