@@ -1,0 +1,42 @@
+name: "Setup GLPI plugin"
+description: "Checks out the plugin and links it into the GLPI container image, exposing its plugin key"
+
+outputs:
+  plugin-key:
+    description: "Plugin key extracted from setup.php"
+    value: "${{ steps.get-plugin-key.outputs.plugin-key }}"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Checkout setup.php"
+      uses: "actions/checkout@v7"
+      with:
+        sparse-checkout: setup.php
+        path: tmp_setup
+
+    - name: "Get Plugin Key"
+      id: "get-plugin-key"
+      shell: "bash"
+      run: |
+        PLUGIN_KEY=$(sed --quiet 's/.*function plugin_version_\([a-z0-9_]\+\).*/\1/p' tmp_setup/setup.php | head --lines=1)
+        if [ -z "$PLUGIN_KEY" ]; then
+          echo "Could not extract plugin key from setup.php"
+          exit 1
+        fi
+        echo "PLUGIN_KEY=$PLUGIN_KEY" >> $GITHUB_ENV
+        echo "plugin-key=$PLUGIN_KEY" >> $GITHUB_OUTPUT
+
+    - name: "Checkout Plugin"
+      uses: "actions/checkout@v7"
+
+    - name: "Link Plugin to GLPI"
+      shell: "bash"
+      run: |
+        sudo ln -s $GITHUB_WORKSPACE /var/www/glpi/plugins/$PLUGIN_KEY
+        # Fix permissions for logs and other writable dirs
+        # Open the whole tree for writing so any tool (present or future) can write wherever it needs to.
+        sudo mkdir -p /var/www/glpi/tests/files/_log
+        sudo chmod -R a+rwX /var/www/glpi/
+        # Ensure git trusts the directory
+        git config --global --add safe.directory '*'
